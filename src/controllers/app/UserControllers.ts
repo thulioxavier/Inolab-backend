@@ -13,7 +13,7 @@ type PersoneModel = {
 
 interface JsonResponse {
     data: Object,
-    error: Object,
+    error: Object | string,
 }
 
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
@@ -22,39 +22,38 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
 
     try {
 
-        if(await UserServices.userByEmail(email) <= 0){
+        if (await UserServices.userByEmail(email) <= 0) {
             await UserServices.create({
                 email,
                 name,
                 password: await CryptoPass.newPass(password)
             }).then(async (resultUser) => {
-    
+
                 await TokenUserServices.create({
-                    id_user: Number(resultUser?.id), 
-                    token: await TokenUser.newToken(), 
+                    id_user: Number(resultUser?.id),
+                    token: await TokenUser.newToken(),
                 }).then((resultToken) => {
                     json.data = { resultToken, resultUser };
-                    res.status(200).json(json);
-                }).catch( async (reject) => {
+                    return res.status(200).json(json);
+                }).catch(async (reject) => {
                     const e = await Error.SelectError(reject.code);
                     reject.msg = e;
                     json.error = { reject };
-                    res.status(500).json(json);
+                    return res.status(500).json(json);
                 });
-    
-            }).catch( async (reject) => {
+
+            }).catch(async (reject) => {
                 const e = await Error.SelectError(reject.code);
                 reject.msg = e;
                 json.error = { reject };
-                res.status(500).json(json);
+                return res.status(500).json(json);
             });
-        }else{
+        } else {
             json.error = 'Esse E-mail já esté em uso por outro usuário!';
-            res.status(200).json(json);
+            return res.status(200).json(json);
         }
-
     } catch (error) {
         json.error = { error };
-        res.status(500).send(json.error);
+        return res.status(500).send(json.error);
     }
 }
