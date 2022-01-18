@@ -23,7 +23,7 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
     try {
 
         if (await UserServices.userByEmail(email) <= 0) {
-            await UserServices.create({
+            UserServices.create({
                 email,
                 name,
                 password: await CryptoPass.newPass(password)
@@ -54,6 +54,7 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
         }
     } catch (error) {
         json.error = { error };
+        console.log(error)
         return res.status(500).send(json.error);
     }
 }
