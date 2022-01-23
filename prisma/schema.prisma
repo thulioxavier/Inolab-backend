@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id        Int @id @default(autoincrement())
+  uuid      String @default(uuid())
   name      String
   email     String @unique
   password  String
@@ -30,3 +31,13 @@ model Token_User {
 
   @@map("token_users")
 }
+
+model Subjects {
+  id      Int @id @default(autoincrement())
+  name    String 
+  show    Boolean @default(true)
+  icon    String  @default("")
+
+  @@map("subjects")
+}
+

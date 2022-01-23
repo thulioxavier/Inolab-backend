@@ -1,5 +1,3 @@
-
-
 export const Error = {
     SelectError: async (code: string) => {
         let msg_error = '';
