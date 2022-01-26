@@ -5,17 +5,16 @@ const db = new PrismaClient();
 
 
 interface JsonResponse {
-    data: Object,
+    data: Array<object>,
     error: Object | string,
 }
-
-let json: JsonResponse = { data: Object, error: Object };
+let json: JsonResponse = { data: [], error: {} };
 
 export const CreateSubject = async (req: Request, res: Response) => {
     const { name, icon} = req.body;
 
     try {
-        const response = await db.subjects.create({
+        const response = await db.subject.create({
             data: {
                 name,
                 icon,
@@ -24,8 +23,7 @@ export const CreateSubject = async (req: Request, res: Response) => {
             json.error = reject;
             return res.status(200).json(json);
         });
-
-        json.data = { response };
+        json.data = [response];
         return res.status(200).json(json);
     } catch (error) {
         console.log(error)
@@ -36,9 +34,8 @@ export const CreateSubject = async (req: Request, res: Response) => {
 
 export const SelectAreas = async (req: Request, res: Response) => {
     try {
-        const response = await db.subjects.findMany({where: {show: true}});
-
-        json.data = { response };
+        const response = await db.subject.findMany({where: {show: true}});
+        json.data = response ;
         return res.status(200).json(json);
     } catch (error) {
         console.log(error)
@@ -46,4 +43,5 @@ export const SelectAreas = async (req: Request, res: Response) => {
         return res.status(500).send(json.error);
     }
 }
+
 

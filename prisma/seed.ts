@@ -9,6 +9,7 @@ const main = async () => {
             email: 'thulioxavier@gmail.com',
             name: 'Thulio Xavier',
             password: '123123123',
+            registration: '123456789456'
         }
     });
 }

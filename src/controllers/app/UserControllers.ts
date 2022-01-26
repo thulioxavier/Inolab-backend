@@ -5,20 +5,25 @@ import { TokenUserServices } from '../../services/TokenUserServices';
 import { CryptoPass } from '../../utils/PasswordCript';
 import { TokenUser } from '../../utils/TokenUser';
 
+
+import { PrismaClient } from "@prisma/client";
+const db = new PrismaClient();
+
 type PersoneModel = {
     email: string,
     name: string,
     password: string
+    registration: string
 }
 
 interface JsonResponse {
     data: Object,
     error: Object | string,
 }
+let json: JsonResponse = { data: Object, error: Object };
 
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object };
-    const { email, name, password } = req.body;
+    const { email, name, password, registration } = req.body;
 
     try {
 
@@ -26,7 +31,8 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
             UserServices.create({
                 email,
                 name,
-                password: await CryptoPass.newPass(password)
+                password: await CryptoPass.newPass(password),
+                registration
             }).then(async (resultUser) => {
 
                 await TokenUserServices.create({
@@ -52,6 +58,31 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
             json.error = 'Esse E-mail já esté em uso por outro usuário!';
             return res.status(200).json(json);
         }
+    } catch (error) {
+        json.error = { error };
+        console.log(error)
+        return res.status(500).send(json.error);
+    }
+};
+
+
+export const SelectUsers = async (req: Request, res: Response) => {
+    try {
+        const response = await db.user.findMany({
+            select: {
+                password: false,
+                id: true,
+                uuid: true,
+                name: true,
+                email: true,
+                registration: true,
+            },
+            orderBy: {
+                id: 'desc'
+            }
+        });
+        json.data = response;
+        res.status(200).json(json);
     } catch (error) {
         json.error = { error };
         console.log(error)

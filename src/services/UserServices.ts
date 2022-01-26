@@ -5,7 +5,8 @@ const db = new PrismaClient();
 type ValuesCreate = {
     email: string,
     name: string,
-    password: string
+    password: string,
+    registration: string
 }
 
 export const UserServices = {
