@@ -8,10 +8,11 @@ interface JsonResponse {
     data: Array<object>,
     error: Object | string,
 }
-let json: JsonResponse = { data: [], error: {} };
 
 export const CreateSubject = async (req: Request, res: Response) => {
-    const { name, icon} = req.body;
+    let json: JsonResponse = { data: [], error: {} };
+
+    const { name, icon } = req.body;
 
     try {
         const response = await db.subject.create({
@@ -33,9 +34,11 @@ export const CreateSubject = async (req: Request, res: Response) => {
 };
 
 export const SelectAreas = async (req: Request, res: Response) => {
+    let json: JsonResponse = { data: [], error: {} };
+
     try {
-        const response = await db.subject.findMany({where: {show: true}});
-        json.data = response ;
+        const response = await db.subject.findMany({ where: { show: true } });
+        json.data = response;
         return res.status(200).json(json);
     } catch (error) {
         console.log(error)

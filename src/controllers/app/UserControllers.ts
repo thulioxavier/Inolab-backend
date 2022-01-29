@@ -20,9 +20,10 @@ interface JsonResponse {
     data: Object,
     error: Object | string,
 }
-let json: JsonResponse = { data: Object, error: Object };
 
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
+    let json: JsonResponse = { data: Object, error: Object };
+
     const { email, name, password, registration } = req.body;
 
     try {
@@ -67,6 +68,8 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
 
 
 export const SelectUsers = async (req: Request, res: Response) => {
+    let json: JsonResponse = { data: Object, error: Object };
+
     try {
         const response = await db.user.findMany({
             select: {
@@ -76,6 +79,8 @@ export const SelectUsers = async (req: Request, res: Response) => {
                 name: true,
                 email: true,
                 registration: true,
+                status: true,
+                avatar: true
             },
             orderBy: {
                 id: 'desc'
