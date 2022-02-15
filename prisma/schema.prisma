@@ -16,7 +16,12 @@ model User {
   registration String       @unique @db.VarChar(250)
   avatar       String?      @default("https://cdn-icons-png.flaticon.com/512/147/147144.png")
   status       Boolean      @default(true)
+  id_couser    Int?
+
+  courses    Course? @relation(fields: [id_couser], references: [id])
+  
   token_users  Token_User[]
+
 
   @@map("users")
 }
@@ -125,7 +130,7 @@ model Example {
 
 model Reference {
   id         Int     @id @default(autoincrement())
-  body       String
+  body       String  @db.VarChar(250)
   id_content Int
   content    Content @relation(fields: [id_content], references: [id])
 
@@ -172,3 +177,13 @@ model Control_User {
 
   @@map("control_users")
 }
+
+model Course {
+  id       Int      @id @default(autoincrement())
+  name     String   @db.VarChar(250)
+
+  users    User[]
+
+  @@map("courses")
+}
+
