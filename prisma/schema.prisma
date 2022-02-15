@@ -8,19 +8,20 @@ datasource db {
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
-  email        String       @unique @db.VarChar(250)
-  name         String       @db.VarChar(250)
-  password     String       @db.VarChar(250)
-  uuid         String       @unique @default(uuid())
-  registration String       @unique @db.VarChar(250)
-  avatar       String?      @default("https://cdn-icons-png.flaticon.com/512/147/147144.png")
-  status       Boolean      @default(true)
+  id           Int     @id @default(autoincrement())
+  email        String  @unique @db.VarChar(250)
+  name         String  @db.VarChar(250)
+  last_name    String  @db.VarChar(250)
+  password     String  @db.VarChar(250)
+  uuid         String  @unique @default(uuid())
+  registration String  @unique @db.VarChar(250)
+  avatar       String? @default("https://cdn-icons-png.flaticon.com/512/147/147144.png")
+  status       Boolean @default(true)
   id_couser    Int?
 
-  courses    Course? @relation(fields: [id_couser], references: [id])
-  
-  token_users  Token_User[]
+  courses Course? @relation(fields: [id_couser], references: [id])
+
+  token_users Token_User[]
 
 
   @@map("users")
@@ -30,6 +31,7 @@ model Admin {
   id           Int           @id @default(autoincrement())
   uuid         String        @unique @default(uuid()) @db.VarChar(250)
   name         String        @db.VarChar(250)
+  last_name    String        @db.VarChar(250)
   email        String        @unique @db.VarChar(250)
   password     String        @db.VarChar(250)
   registration String?       @unique @db.VarChar(250)
@@ -65,7 +67,7 @@ model Subject {
   name    String   @db.VarChar(250)
   show    Boolean  @default(true)
   icon    String   @default("")
-  modules Module[] 
+  modules Module[]
 
   @@map("subjects")
 }
@@ -179,11 +181,10 @@ model Control_User {
 }
 
 model Course {
-  id       Int      @id @default(autoincrement())
-  name     String   @db.VarChar(250)
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(250)
 
-  users    User[]
+  users User[]
 
   @@map("courses")
 }
-

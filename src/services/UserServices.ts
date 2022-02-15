@@ -6,7 +6,8 @@ type ValuesCreate = {
     email: string,
     name: string,
     password: string,
-    registration: string
+    registration: string,
+    last_name: string,
 }
 
 export const UserServices = {

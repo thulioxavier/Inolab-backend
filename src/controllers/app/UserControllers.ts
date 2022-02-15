@@ -13,7 +13,8 @@ type PersoneModel = {
     email: string,
     name: string,
     password: string
-    registration: string
+    registration: string,
+    last_name: string
 }
 
 interface JsonResponse {
@@ -24,7 +25,7 @@ interface JsonResponse {
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object };
 
-    const { email, name, password, registration } = req.body;
+    const { email, name, password, registration, lastName} = req.body;
 
     try {
 
@@ -33,7 +34,8 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
                 email,
                 name,
                 password: await CryptoPass.newPass(password),
-                registration
+                registration,
+                last_name: lastName
             }).then(async (resultUser) => {
 
                 await TokenUserServices.create({
