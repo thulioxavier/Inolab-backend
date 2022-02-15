@@ -1,0 +1,30 @@
+_id: req_2b8bd8abfb3c43ff9c23df3d28c6e722
+type: Request
+parentId: fld_c42386d081f34d35be62e5022b11688b
+modified: 1644554362645
+created: 1643003785579
+url: "{{ _.base_url_app }}/module"
+name: CreateModules
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Normalização de Tabelas",
+    	"id_subject": 1
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_b1d86bc280114b1e8acd561a13d37097
+authentication: {}
+metaSortKey: -1643003785579
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

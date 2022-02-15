@@ -1,0 +1,26 @@
+_id: req_f2326eb6c74247fdbd75a69c1bc6cce1
+type: Request
+parentId: fld_888fabe157884c249a8f117abfad603f
+modified: 1643312199854
+created: 1642911718791
+url: "{{ _.base_url_app }}/subject"
+name: SelectSubject
+description: ""
+method: GET
+body:
+  mimeType: application/json
+  text: ""
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_2d52b81443d74b8f86be649caa64c5b6
+authentication: {}
+metaSortKey: -1642890768724
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

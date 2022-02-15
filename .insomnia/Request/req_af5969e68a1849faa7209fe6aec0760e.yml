@@ -1,0 +1,21 @@
+_id: req_af5969e68a1849faa7209fe6aec0760e
+type: Request
+parentId: fld_c42386d081f34d35be62e5022b11688b
+modified: 1643177435569
+created: 1643177421216
+url: "{{ _.base_url_app }}/modules/new"
+name: Select New Modules
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1643177421216
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

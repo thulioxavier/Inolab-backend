@@ -1,0 +1,37 @@
+_id: req_85e1c727c32d45e7bcbe89d066f3f23c
+type: Request
+parentId: fld_ab791d78f2484cd2838d640283caffe7
+modified: 1644830916571
+created: 1643331883647
+url: http://localhost:8080/api/web/content
+name: Create Content
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: >-
+    {
+    	"title": "Banco de Dados e suas regras",
+    	"body": "Teste Body",
+    	"id_module": 1,
+    	"abstract": "Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos.",
+    	"title_video": "Video Text",
+    	"url": "linkvai aqui",
+    	"title_exemple": "teste",
+    	"body_ref":"asdasdasdasd",
+    	"body_exemple":"asdasdasd"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_7ceb011c9f9e4d338ad63ae102972974
+authentication: {}
+metaSortKey: -1643331883648
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,21 @@
+_id: req_709f7d4a06f74c5da73305d3f599dfa4
+type: Request
+parentId: fld_c42386d081f34d35be62e5022b11688b
+modified: 1643338031666
+created: 1643338001249
+url: "{{ _.base_url_app }}/modules/subject/18"
+name: Select Modules Subjects
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1643338001249
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
