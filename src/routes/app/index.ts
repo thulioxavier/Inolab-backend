@@ -18,5 +18,4 @@ appRoutes.get('/modules', ModuleControllers.SelectModules);
 appRoutes.get('/modules/new', ModuleControllers.SelectNewModules);
 appRoutes.get('/modules/subject/:id_subject', ModuleControllers.SelectModulesSubject);
 
-
 export default appRoutes;
