@@ -11,16 +11,16 @@ model User {
   id           Int          @id @default(autoincrement())
   email        String       @unique @db.VarChar(250)
   name         String       @db.VarChar(250)
-  last_name    String       @db.VarChar(250)
   password     String       @db.VarChar(250)
   uuid         String       @unique @default(uuid())
   registration String       @unique @db.VarChar(250)
   avatar       String?      @default("https://cdn-icons-png.flaticon.com/512/147/147144.png")
   status       Boolean      @default(true)
   id_couser    Int?
+  last_name    String       @db.VarChar(250)
   courses      Course?      @relation(fields: [id_couser], references: [id])
+  answers      Answer[]
   token_users  Token_User[]
-  Answer       Answer[]
 
   @@map("users")
 }
@@ -29,12 +29,12 @@ model Admin {
   id           Int           @id @default(autoincrement())
   uuid         String        @unique @default(uuid()) @db.VarChar(250)
   name         String        @db.VarChar(250)
-  last_name    String        @db.VarChar(250)
   email        String        @unique @db.VarChar(250)
   password     String        @db.VarChar(250)
   registration String?       @unique @db.VarChar(250)
   avatar       String?       @default("https://cdn-icons-png.flaticon.com/512/147/147144.png") @db.VarChar(250)
   status       Boolean       @default(true)
+  last_name    String        @db.VarChar(250)
   contents     Content[]
   modules      Module[]
   token_admins Token_Admin[]
@@ -86,8 +86,8 @@ model Content {
   id             Int             @id @default(autoincrement())
   title          String          @db.VarChar(250)
   body           String
-  abstract       String          @db.VarChar(250)
   id_module      Int
+  abstract       String          @db.VarChar(250)
   id_admin       Int?
   admins         Admin?          @relation(fields: [id_admin], references: [id])
   modules        Module          @relation(fields: [id_module], references: [id])
@@ -141,7 +141,7 @@ model Conetnt_Video {
   id         Int     @id @default(autoincrement())
   id_content Int
   title      String  @db.VarChar(250)
-  url        String  @db.Text
+  url        String
   content    Content @relation(fields: [id_content], references: [id])
 
   @@map("content_videos")
@@ -151,12 +151,12 @@ model Question {
   id         Int      @id @default(autoincrement())
   id_content Int
   time       Int?
-  title      String   @db.VarChar(250)
-  body       String   @db.Text
+  body       String
   difficulty Int
+  title      String   @db.VarChar(250)
   contents   Content  @relation(fields: [id_content], references: [id])
+  answers    Answer[]
   options    Option[]
-  Answer     Answer[]
 
   @@map("questions")
 }
@@ -164,11 +164,11 @@ model Question {
 model Option {
   id          Int      @id @default(autoincrement())
   id_question Int
-  body        String   @db.Text
+  body        String
   correct     Boolean  @default(false)
   questions   Question @relation(fields: [id_question], references: [id])
+  answers     Answer[]
 
-  Answer Answer[]
   @@map("options")
 }
 
@@ -197,10 +197,9 @@ model Answer {
   status      Boolean
   points      Int
   time_spent  Float
-  questions   Question @relation(fields: [id_question], references: [id])
   options     Option   @relation(fields: [id_option], references: [id])
+  questions   Question @relation(fields: [id_question], references: [id])
   users       User     @relation(fields: [id_user], references: [id])
 
   @@map("answers")
 }
-

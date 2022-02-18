@@ -28,6 +28,7 @@ interface JsonResponse {
 
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object };
+    
 
     const { email, name, password, registration, lastName } = req.body;
 

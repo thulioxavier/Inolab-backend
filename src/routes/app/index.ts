@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ContentControllers, ModuleControllers, SubjectControllers } from "../../controllers/app";
+import { AnswerControllers, ContentControllers, ModuleControllers, SubjectControllers } from "../../controllers/app";
 
 import UserRoutes from './user.routes';
 
@@ -18,4 +18,5 @@ appRoutes.get('/modules', ModuleControllers.SelectModules);
 appRoutes.get('/modules/new', ModuleControllers.SelectNewModules);
 appRoutes.get('/modules/subject/:id_subject', ModuleControllers.SelectModulesSubject);
 
+appRoutes.post('/answer', AnswerControllers.CreateAnswer);
 export default appRoutes;

@@ -42,6 +42,7 @@ export const CreateQuestion = async (req: Request, res: Response) => {
     if (body && difficulty && id_content && title) {
         if (question_array.length >= 0) {
             try {
+
                 const arrayData: any = [];
                 await db.question.create({
                     data: {
@@ -85,11 +86,11 @@ export const CreateQuestion = async (req: Request, res: Response) => {
                     });
 
                 }).catch(async (reject) => {
-
                     json.data = { status: false };
                     json.error = "Houve uma falha ao cadastrar a Questão!";
                     return res.status(200).json(json);
                 });
+
             } catch (error) {
                 json.data = { status: false };
                 json.error = "Não foi possível criar uma nova questão no momento!!";
@@ -101,7 +102,6 @@ export const CreateQuestion = async (req: Request, res: Response) => {
             return res.status(200).json(json);
         }
     } else {
-
         json.data = { status: false };
         json.error = "Alguns campos não foram preenchidos!";
         return res.status(200).json(json);
@@ -148,7 +148,6 @@ export const SelectQuestionById = async (req: Request, res: Response) => {
         json.error = "Nenhuma Questão foi selecioanda!!";
         return res.status(200).json(json);
     }
-
 };
 
 
