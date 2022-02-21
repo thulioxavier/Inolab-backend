@@ -9,7 +9,7 @@ webRoutes.post('/content', ContentControllers.CreateContent);
 webRoutes.post('/couser', CouserControllers.CreateCouser);
 
 webRoutes.post('/subject', SubjectControllers.CreateSubject);
-webRoutes.get('/subject', SubjectControllers.SelectAreas);
+webRoutes.get('/subject', SubjectControllers.SelectSubject);
 
 
 webRoutes.post('/module', ModuleControllers.CreateModule);
