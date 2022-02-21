@@ -160,6 +160,7 @@ export const SelectUsers = async (req: Request, res: Response) => {
 export const ShowInfoDash = async (req: Request, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object };
     let { user } = req.headers;
+    let {pg} = req.params;
 
     try {
         const metrics: any = {
@@ -222,7 +223,8 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
                                     points: true,
                                 },
                             })
-                            .then((response) => {
+                            .then(async (response) => {
+                                const ArrayChartMetrics: any = [];
 
                                 metrics.total = {
                                     points: response._sum.points ? response._sum.points : 0,
@@ -232,7 +234,59 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
                                 metrics.hits.percent = percent(metrics.total.count, metrics.hits.count)
                                 metrics.mistakes.percent = percent(metrics.total.count, metrics.mistakes.count)
 
-                                json.data = { status: true, metrics };
+                                await db.answer.groupBy({
+                                    by: ['answer_date'],
+                                    where:{
+                                        id_user: Number(user)
+                                    },
+                                    orderBy: {
+                                        answer_date: 'asc'
+                                    },
+                                    _count: true,
+                                }).then(async (chartMetrics) => {
+                                    chartMetrics.map((item) => {
+                                         ArrayChartMetrics.push({date:item.answer_date, count: item._count });
+                                    });
+                                });
+
+                                let history: Array<object> = [];
+
+                                await db.answer.findMany({
+                                    where: {
+                                        id_user: Number(user),
+                                    },
+                                    select:{
+                                        answer_date: false,
+                                        createdAt: false,
+                                        id: true,
+                                        id_option: false,
+                                        id_question: false,
+                                        id_user: false,
+                                        points: true,
+                                        status: true,
+                                        time_spent: false,
+                                        updatedAt: false,
+                                        questions:{
+                                            select:{
+                                                body: false,
+                                                difficulty: true,
+                                                id: false,
+                                                time: false,
+                                                title: true,
+                                                id_content: false
+                                            }
+                                        }
+                                    },
+                                    
+                                    take: pg ? Number(pg) : 10,
+                                    orderBy:{
+                                        createdAt: 'desc'
+                                    }
+                                }).then(async (response) => {
+                                    history = response
+                                });
+                                
+                                json.data = { status: true, metrics, chart: ArrayChartMetrics ? ArrayChartMetrics : [], history };
                                 return res.status(200).json(json);
                             })
                             .catch((reject) => {

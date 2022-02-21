@@ -33,7 +33,7 @@ export const CreateSubject = async (req: Request, res: Response) => {
     }
 };
 
-export const SelectAreas = async (req: Request, res: Response) => {
+export const SelectSubject = async (req: Request, res: Response) => {
     let json: JsonResponse = { data: [], error: {} };
 
     try {

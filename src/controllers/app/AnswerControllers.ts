@@ -15,15 +15,24 @@ interface BodyCreateAnswer {
     status: boolean,
     points: number,
     time_spent: number
+    date: string,
+}
+
+const formatData = async (date: Date) => {
+    let dateAno = date.getFullYear();
+    let dateDia: number | string = date.getDate() < 10 ?"0"+date.getDate() : date.getDate();
+    let dateMes: number | string = date.getMonth()+1 < 10 ?"0"+(date.getMonth()+1) : date.getMonth()+1;
+    return(`${dateAno}-${dateMes}-${dateDia}`) as string;
 }
 
 export const CreateAnswer = async (req: Request, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object };
 
     let { id_user } = req.headers;
-    let { id_question, id_option, status, points, time_spent }: BodyCreateAnswer= req.body;
+    let { id_question, id_option, status, points, time_spent, date }: BodyCreateAnswer= req.body;
 
     try {
+        let paramsDate = new Date();
         await db.answer.create({
             data: {
                 id_option,
@@ -31,7 +40,8 @@ export const CreateAnswer = async (req: Request, res: Response) => {
                 id_user: Number(id_user),
                 status,
                 points,
-                time_spent
+                time_spent,  
+                answer_date: await formatData(paramsDate)
             }
         }).then((response) => {
             json.data = {status: true};

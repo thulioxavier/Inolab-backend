@@ -197,11 +197,12 @@ model Answer {
   status      Boolean
   points      Int
   time_spent  Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  answer_date String
   options     Option   @relation(fields: [id_option], references: [id])
   questions   Question @relation(fields: [id_question], references: [id])
   users       User     @relation(fields: [id_user], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
   @@map("answers")
 }
