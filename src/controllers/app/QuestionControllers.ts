@@ -22,84 +22,7 @@ interface ArrayData {
   id_question: number;
 }
 
-export const CreateQuestion = async (req: Request, res: Response) => {
-  let json: JsonResponse = { data: Object, error: Object };
 
-  let idQuestion: any = null;
-
-  let { time, body, difficulty, title, question_array }: Body = req.body;
-
-  let { id_content } = req.headers;
-
-  if (body && difficulty && id_content && title) {
-    if (question_array.length >= 0) {
-      try {
-        const arrayData: any = [];
-        await db.question
-          .create({
-            data: {
-              time,
-              body,
-              difficulty,
-              title,
-              id_content: Number(id_content),
-            },
-          })
-          .then(async (response) => {
-            idQuestion = response.id as number;
-
-            question_array.map((item) => {
-              let dataItem: any = item;
-              dataItem.id_question = response.id;
-              arrayData.push(dataItem);
-            });
-
-            await db.option
-              .createMany({
-                data: arrayData,
-              })
-              .then(async (response) => {
-                json.data = {
-                  id_question: idQuestion,
-                  options: response,
-                  status: true,
-                };
-
-                return res.status(200).json(json);
-              })
-              .catch(async (reject) => {
-                await db.question.delete({
-                  where: {
-                    id: idQuestion,
-                  },
-                });
-
-                json.data = { status: false };
-                json.error = "Houve uma falha ao cadastrar as Alternativas!";
-                return res.status(200).json(json);
-              });
-          })
-          .catch(async (reject) => {
-            json.data = { status: false };
-            json.error = "Houve uma falha ao cadastrar a Questão!";
-            return res.status(200).json(json);
-          });
-      } catch (error) {
-        json.data = { status: false };
-        json.error = "Não foi possível criar uma nova questão no momento!!";
-        return res.status(200).json(json);
-      }
-    } else {
-      json.data = { status: false };
-      json.error = "Não é possível criar uma Questão sem alternativas!!";
-      return res.status(200).json(json);
-    }
-  } else {
-    json.data = { status: false };
-    json.error = "Alguns campos não foram preenchidos!";
-    return res.status(200).json(json);
-  }
-};
 
 export const SelectQuestionById = async (req: Request, res: Response) => {
   let json: JsonResponse = { data: Object, error: Object };
@@ -164,10 +87,10 @@ export const SelectQuestionByContent = async (req: Request, res: Response) => {
             json.data = { status: false };
             json.error = "Nenhuma Questão encontrada!!";
             return res.status(200).json(json);
+
           } else {
             let data: any = response;
-            data.status = true;
-            json.data = data;
+            json.data = {status: true, data};
             return res.status(200).json(json);
           }
         })
