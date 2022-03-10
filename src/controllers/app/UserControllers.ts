@@ -112,11 +112,13 @@ export const Login = async (req: Request, res: Response) => {
                         name: user.name,
                     },
                     process.env.JWT_SECRET_KEY as string,
-                    {
-                        expiresIn: "24h",
-                    }
                 );
                 json.data = {
+                    user: {
+                        id: user.id,
+                        email: user.email,
+                        name: user.name,
+                    },
                     status: true,
                     TOKEN,
                 };
@@ -160,7 +162,7 @@ export const SelectUsers = async (req: Request, res: Response) => {
 export const ShowInfoDash = async (req: Request, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object };
     let { user } = req.headers;
-    let {pg} = req.params;
+    let { pg } = req.params;
 
     try {
         const metrics: any = {
@@ -236,7 +238,7 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
 
                                 await db.answer.groupBy({
                                     by: ['answer_date'],
-                                    where:{
+                                    where: {
                                         id_user: Number(user)
                                     },
                                     orderBy: {
@@ -245,7 +247,7 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
                                     _count: true,
                                 }).then(async (chartMetrics) => {
                                     chartMetrics.map((item) => {
-                                         ArrayChartMetrics.push({date:item.answer_date, count: item._count });
+                                        ArrayChartMetrics.push({ date: item.answer_date, count: item._count });
                                     });
                                 });
 
@@ -255,7 +257,7 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
                                     where: {
                                         id_user: Number(user),
                                     },
-                                    select:{
+                                    select: {
                                         answer_date: false,
                                         createdAt: false,
                                         id: true,
@@ -266,8 +268,8 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
                                         status: true,
                                         time_spent: false,
                                         updatedAt: false,
-                                        questions:{
-                                            select:{
+                                        questions: {
+                                            select: {
                                                 body: false,
                                                 difficulty: true,
                                                 id: false,
@@ -277,15 +279,15 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
                                             }
                                         }
                                     },
-                                    
+
                                     take: pg ? Number(pg) : 10,
-                                    orderBy:{
+                                    orderBy: {
                                         createdAt: 'desc'
                                     }
                                 }).then(async (response) => {
                                     history = response
                                 });
-                                
+
                                 json.data = { status: true, metrics, chart: ArrayChartMetrics ? ArrayChartMetrics : [], history };
                                 return res.status(200).json(json);
                             })
