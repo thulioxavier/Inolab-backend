@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { ModuleControllers, SubjectControllers } from "../../controllers/app";
-import { ContentControllers, CouserControllers, QuestionControllers } from "../../controllers/web";
+import { ModuleControllers } from "../../controllers/app";
+import { ContentControllers, CouserControllers, QuestionControllers, SubjectControllers } from "../../controllers/web";
 
 
 const webRoutes = Router();
@@ -9,7 +9,7 @@ webRoutes.post('/content', ContentControllers.CreateContent);
 webRoutes.post('/couser', CouserControllers.CreateCouser);
 
 webRoutes.post('/subject', SubjectControllers.CreateSubject);
-webRoutes.get('/subject', SubjectControllers.SelectSubject);
+webRoutes.get('/subjects', SubjectControllers.SelectSubject);
 
 
 webRoutes.post('/module', ModuleControllers.CreateModule);
