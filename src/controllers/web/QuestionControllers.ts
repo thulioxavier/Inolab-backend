@@ -14,6 +14,7 @@ interface Body {
   difficulty: number;
   title: string;
   question_array: Array<object>;
+  id_content: number
 }
 
 interface ArrayData {
@@ -25,15 +26,14 @@ interface ArrayData {
 export const CreateQuestion = async (req: Request, res: Response) => {
   let json: JsonResponse = { data: Object, error: Object };
 
-  let idQuestion: any = null;
 
-  let { time, body, difficulty, title, question_array }: Body = req.body;
+  try {
+    let { time, body, difficulty, question_array, id_content }: Body = req.body;
 
-  let { id_content } = req.headers;
+    let idQuestion: any = null;
 
-  if (body && difficulty && id_content && title) {
-    if (question_array.length >= 0) {
-      try {
+    if (body && difficulty >=0 && id_content) {
+      if (question_array.length > 0) {
         const arrayData: any = [];
         await db.question
           .create({
@@ -41,7 +41,6 @@ export const CreateQuestion = async (req: Request, res: Response) => {
               time,
               body,
               difficulty,
-              title,
               id_content: Number(id_content),
             },
           })
@@ -76,28 +75,29 @@ export const CreateQuestion = async (req: Request, res: Response) => {
 
                 json.data = { status: false };
                 json.error = "Houve uma falha ao cadastrar as Alternativas!";
-                return res.status(200).json(json);
+                return res.status(500).json(json);
               });
           })
           .catch(async (reject) => {
             json.data = { status: false };
             json.error = "Houve uma falha ao cadastrar a Questão!";
-            return res.status(200).json(json);
+            return res.status(500).json(json);
           });
-      } catch (error) {
+
+      } else {
         json.data = { status: false };
-        json.error = "Não foi possível criar uma nova questão no momento!!";
-        return res.status(200).json(json);
+        json.error = "Não é possível criar uma Questão sem alternativas!!";
+        return res.status(500).json(json);
       }
     } else {
       json.data = { status: false };
-      json.error = "Não é possível criar uma Questão sem alternativas!!";
-      return res.status(200).json(json);
+      json.error = "Alguns campos não foram preenchidos!";
+      return res.status(500).json(json);
     }
-  } else {
+  } catch (error) {
     json.data = { status: false };
-    json.error = "Alguns campos não foram preenchidos!";
-    return res.status(200).json(json);
+    json.error = "Não foi possível criar uma nova questão no momento!!";
+    return res.status(500).json(json);
   }
 };
 

@@ -17,7 +17,7 @@ appRoutes.use("/user", UserRoutes);
 appRoutes.get("/contents/:id_module", ContentControllers.SelectContent);
 appRoutes.get("/select-content/:id", ContentControllers.SelectContentById);
 appRoutes.get(
-  "/question/content/:id_content",
+  "/question/content/:id_content/:id_user",
   QuestionControllers.SelectQuestionByContent
 );
 

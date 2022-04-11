@@ -69,7 +69,7 @@ export const SelectQuestionById = async (req: Request, res: Response) => {
 
 export const SelectQuestionByContent = async (req: Request, res: Response) => {
   let json: JsonResponse = { data: Object, error: Object };
-  let { id_content } = req.params;
+  let { id_content, id_user} = req.params;
 
   if (id_content) {
     try {
@@ -79,7 +79,30 @@ export const SelectQuestionByContent = async (req: Request, res: Response) => {
             id_content: Number(id_content),
           },
           include: {
-            options: true,
+            options: {
+              include:{
+                answers: {
+                  select:{
+                    createdAt: false,
+                    answer_date: false,
+                    id: true,
+                    id_option: false,
+                    id_question: false,
+                    id_user: false,
+                    options: false,
+                    points: true,
+                    questions: false,
+                    status: true,
+                    time_spent: false,
+                    updatedAt: false,
+                    users: false,
+                  },
+                  where: {
+                    id_user: Number(id_user),
+                  }
+                }
+              }
+            },
           },
         })
         .then((response) => {

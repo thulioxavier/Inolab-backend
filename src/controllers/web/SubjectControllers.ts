@@ -32,7 +32,6 @@ export const CreateSubject = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }
@@ -46,7 +45,6 @@ export const SelectSubject = async (req: Request, res: Response) => {
         json.data = response;
         return res.status(200).json(json);
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }

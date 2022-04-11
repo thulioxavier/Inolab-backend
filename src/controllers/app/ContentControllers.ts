@@ -29,15 +29,11 @@ export const SelectContent = async (req: Request, res: Response) => {
                         subjects:true
                     }
                 },
-                content_Videos: true,
-                examples: true,
-                references: true,
             },
         });
         json.data = [response];
         return res.status(200).json(json);
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }
@@ -45,12 +41,12 @@ export const SelectContent = async (req: Request, res: Response) => {
 
 export const SelectContentById = async (req: Request, res: Response) => {
     let json: JsonResponse = { data: Object, error: {} };
-    const {id} = req.params;
 
+    const {id} = req.params;
     try {
         const response = await db.content.findFirst({
             where:{
-                id_module: Number(id),
+                id: Number(id),
                 modules:{
                     subjects:{
                         show: true
@@ -64,15 +60,11 @@ export const SelectContentById = async (req: Request, res: Response) => {
                         subjects:true
                     }
                 },
-                content_Videos: true,
-                examples: true,
-                references: true,
             },
         });
         json.data = {status: true, response};
         return res.status(200).json(json);
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }

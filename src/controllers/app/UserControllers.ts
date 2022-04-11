@@ -154,7 +154,6 @@ export const SelectUsers = async (req: Request, res: Response) => {
         res.json(json);
     } catch (error) {
         json.error = { error };
-        console.log(error);
         return res.status(500).send(json.error);
     }
 };
@@ -274,7 +273,6 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
                                                 difficulty: true,
                                                 id: false,
                                                 time: false,
-                                                title: true,
                                                 id_content: false
                                             }
                                         }

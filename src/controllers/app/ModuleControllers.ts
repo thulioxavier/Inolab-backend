@@ -4,38 +4,41 @@ import { PrismaClient } from "@prisma/client";
 const db = new PrismaClient();
 
 interface JsonResponse {
-    data: Array<object>,
+    data: Array<object> | Object,
     error: Object | string,
+    status: Boolean
 }
 
 
 export const CreateModule = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: [], error: {} };
-
+    let json: JsonResponse = { status: false, data: Object, error: {} };
     const { name, id_subject, id_admin } = req.body;
 
     try {
-        const response = await db.module.create({
+        await db.module.create({
             data: {
                 name,
-                id_subject,
+                id_subject: Number(id_subject),
                 id_admin
             }
+        }).then((response) => {
+            json.status = true;
+            json.data = response;
+            return res.status(200).json(json);
         }).catch((reject) => {
             json.error = reject;
             return res.status(200).json(json);
         });
-        json.data = [response];
-        return res.status(200).json(json);
+
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }
 };
 
 export const SelectModules = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: [], error: {} };
+    let json: JsonResponse = { status: false, data: Object, error: {} };
+
 
     try {
         const response = await db.module.findMany({
@@ -46,14 +49,14 @@ export const SelectModules = async (req: Request, res: Response) => {
         json.data = response;
         return res.status(200).json(json);
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }
 };
 
 export const SelectNewModules = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: [], error: {} };
+    let json: JsonResponse = { status: false, data: Object, error: {} };
+
 
     try {
         const response = await db.module.findMany({
@@ -69,15 +72,15 @@ export const SelectNewModules = async (req: Request, res: Response) => {
         json.data = response;
         return res.status(200).json(json);
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }
 };
 
 export const SelectModulesSubject = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: [], error: {} };
-    const {id_subject} = req.params;
+    let json: JsonResponse = { status: false, data: Object, error: {} };
+
+    const { id_subject } = req.params;
     try {
         const response = await db.module.findMany({
             where: {
@@ -93,7 +96,6 @@ export const SelectModulesSubject = async (req: Request, res: Response) => {
         json.data = response;
         return res.status(200).json(json);
     } catch (error) {
-        console.log(error)
         json.error = { error };
         return res.status(500).send(json.error);
     }

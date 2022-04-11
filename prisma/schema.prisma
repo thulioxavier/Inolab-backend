@@ -83,19 +83,19 @@ model Module {
 }
 
 model Content {
-  id             Int             @id @default(autoincrement())
-  title          String          @db.VarChar(250)
-  body           String
-  id_module      Int
-  abstract       String          @db.VarChar(250)
-  id_admin       Int?
-  admins         Admin?          @relation(fields: [id_admin], references: [id])
-  modules        Module          @relation(fields: [id_module], references: [id])
-  content_Videos Conetnt_Video[]
-  examples       Example[]
-  questions      Question[]
-  references     Reference[]
-  tag_contents   Tag_Content[]
+  id           Int           @id @default(autoincrement())
+  title        String        @db.VarChar(250)
+  body         String
+  id_module    Int
+  abstract     String        
+  id_admin     Int?
+  example      String
+  ref          String        
+  url          String        
+  admins       Admin?        @relation(fields: [id_admin], references: [id])
+  modules      Module        @relation(fields: [id_module], references: [id])
+  questions    Question[]
+  tag_contents Tag_Content[]
 
   @@map("contents")
 }
@@ -119,30 +119,27 @@ model Tag_Content {
 }
 
 model Example {
-  id         Int     @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   id_content Int
-  title      String  @db.VarChar(200)
-  body       String  @db.VarChar(200)
-  content    Content @relation(fields: [id_content], references: [id])
+  title      String @db.VarChar(200)
+  body       String @db.VarChar(200)
 
   @@map("examples")
 }
 
 model Reference {
-  id         Int     @id @default(autoincrement())
-  body       String  @db.VarChar(250)
+  id         Int    @id @default(autoincrement())
+  body       String @db.VarChar(250)
   id_content Int
-  content    Content @relation(fields: [id_content], references: [id])
 
   @@map("references")
 }
 
 model Conetnt_Video {
-  id         Int     @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   id_content Int
-  title      String  @db.VarChar(250)
+  title      String @db.VarChar(250)
   url        String
-  content    Content @relation(fields: [id_content], references: [id])
 
   @@map("content_videos")
 }
@@ -153,7 +150,6 @@ model Question {
   time       Int?
   body       String
   difficulty Int
-  title      String   @db.VarChar(250)
   contents   Content  @relation(fields: [id_content], references: [id])
   answers    Answer[]
   options    Option[]

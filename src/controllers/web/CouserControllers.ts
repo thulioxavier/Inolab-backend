@@ -23,13 +23,11 @@ export const CreateCouser = async (req: Request, res: Response) => {
             json.data = { id: response.id };
             return res.status(200).json(json);
         }).catch((reject) => {
-            console.log(reject);
             json.error = reject;
             return res.status(200).json(json);
         })
     } catch (error) {
         json.error = { error };
-        console.log(error)
         return res.status(500).send(json.error);
     }
 

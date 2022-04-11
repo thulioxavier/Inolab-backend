@@ -6,6 +6,7 @@ import { ContentControllers, CouserControllers, QuestionControllers, SubjectCont
 const webRoutes = Router();
 
 webRoutes.post('/content', ContentControllers.CreateContent);
+webRoutes.get('/contents', ContentControllers.SelectContents);
 webRoutes.post('/couser', CouserControllers.CreateCouser);
 
 webRoutes.post('/subject', SubjectControllers.CreateSubject);
@@ -17,7 +18,7 @@ webRoutes.get('/modules', ModuleControllers.SelectModules);
 webRoutes.get('/modules/new', ModuleControllers.SelectNewModules);
 
 
-webRoutes.post('/questions', QuestionControllers.CreateQuestion);
+webRoutes.post('/question', QuestionControllers.CreateQuestion);
 webRoutes.get('/question/:id_question', QuestionControllers.SelectQuestionById);
 webRoutes.get('/question/content/:id_content', QuestionControllers.SelectQuestionByContent);
 
