@@ -10,6 +10,7 @@ datasource db {
 model User {
   id           Int          @id @default(autoincrement())
   email        String       @unique @db.VarChar(250)
+  sexo         String       @db.VarChar(250)
   name         String       @db.VarChar(250)
   password     String       @db.VarChar(250)
   uuid         String       @unique @default(uuid())
@@ -87,11 +88,11 @@ model Content {
   title        String        @db.VarChar(250)
   body         String
   id_module    Int
-  abstract     String        
+  abstract     String
   id_admin     Int?
   example      String
-  ref          String        
-  url          String        
+  ref          String
+  url          String
   admins       Admin?        @relation(fields: [id_admin], references: [id])
   modules      Module        @relation(fields: [id_module], references: [id])
   questions    Question[]

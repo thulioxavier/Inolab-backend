@@ -41,7 +41,7 @@ const percent = (total: number, valor: number): number => {
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object };
 
-    const { email, name, password, registration, lastName } = req.body;
+    const { email, name, password, registration, lastName, sexo} = req.body;
 
     try {
         if ((await UserServices.userByEmail(email)) <= 0) {
@@ -51,6 +51,7 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
                 password: await CryptoPass.newPass(password),
                 registration,
                 last_name: lastName,
+                sexo,
             })
                 .then(async (resultUser) => {
                     await TokenUserServices.create({

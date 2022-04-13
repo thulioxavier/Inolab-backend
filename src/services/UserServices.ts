@@ -8,6 +8,7 @@ type ValuesCreate = {
     password: string,
     registration: string,
     last_name: string,
+    sexo: string,
 }
 
 export const UserServices = {
