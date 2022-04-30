@@ -24,10 +24,11 @@ type PersoneModel = {
 interface JsonResponse {
     data: Object;
     error: Object | string;
+    status: Boolean;
 }
 
 const NewError = (status: boolean, msgError: string): object => {
-    let json: JsonResponse = { data: Object, error: Object };
+    let json: JsonResponse = { data: Object, error: Object,  status: true};
     json.data = { status: status };
     json.error = msgError;
     return json;
@@ -39,7 +40,7 @@ const percent = (total: number, valor: number): number => {
 }
 
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object };
+    let json: JsonResponse = { data: Object, error: Object, status: true };
 
     const { email, name, password, registration, lastName, sexo} = req.body;
 
@@ -88,7 +89,7 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
 };
 
 export const Login = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object };
+    let json: JsonResponse = { data: Object, error: Object,  status: true };
 
     let email: string = req.body.email;
     let password: string = req.body.password;
@@ -133,7 +134,7 @@ export const Login = async (req: Request, res: Response) => {
 };
 
 export const SelectUsers = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object };
+    let json: JsonResponse = { data: Object, error: Object,  status: true };
 
     try {
         const response = await db.user.findMany({
@@ -160,7 +161,7 @@ export const SelectUsers = async (req: Request, res: Response) => {
 };
 
 export const ShowInfoDash = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object };
+    let json: JsonResponse = { data: Object, error: Object,  status: true};
     let { user } = req.headers;
     let { pg } = req.params;
 
@@ -316,4 +317,36 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
             .status(500)
             .json(NewError(false, "Não foi possivel recuperar suas métricas!"));
     }
+
+
 };
+
+export const SelectDateAnswer = async (req: Request, res: Response) => {
+    let json: JsonResponse = { data: Object, error: Object,  status: true };
+
+    const {date, id_user} = req.params;
+    try {
+
+        const right = await db.answer.aggregate({
+            where: {answer_date: date, id_user: parseInt(id_user), status: true},
+            _sum:{
+                points: true,
+            }
+        });
+
+        const wrong = await db.answer.aggregate({
+            where: {answer_date: date, id_user: parseInt(id_user), status: false},
+            _sum:{
+                points: true,
+            }
+        });
+        
+        json.data ={right, wrong};
+        return res.status(200).json(json);
+
+    } catch (error) {
+        json.error = {error};
+        json.status = false;
+        return res.status(500).send(json);
+    }
+}

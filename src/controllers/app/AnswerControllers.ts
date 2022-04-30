@@ -80,7 +80,7 @@ export const CreateAnswer = async (req: Request, res: Response) => {
                 status,
                 points,
                 time_spent,
-                answer_date: new Date().toDateString()
+                answer_date: (await formatData(new Date())).toString()
             }
         }).then((response) => {
             json.data = { status: true };
