@@ -18,7 +18,8 @@ app.use('/api/web', webRoutes);
 
 app.get('/ping', async(req, res) => {
     return res.json({pong: true});
-})
+});
+
 app.listen(port, () => {
     console.info(`Server on: http://localhost:${port}`)
 })
