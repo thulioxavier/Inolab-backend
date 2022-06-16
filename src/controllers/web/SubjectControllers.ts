@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 
 import { PrismaClient } from "@prisma/client";
 const db = new PrismaClient();
@@ -11,7 +11,7 @@ interface JsonResponse {
 }
 
 export const CreateSubject = async (req: Request, res: Response) => {
-    let json: JsonResponse = {status: false ,data: [], error: {} };
+    let json: JsonResponse = { status: false, data: [], error: {} };
 
     const { name, icon } = req.body;
 
@@ -38,10 +38,33 @@ export const CreateSubject = async (req: Request, res: Response) => {
 };
 
 export const SelectSubject = async (req: Request, res: Response) => {
-    let json: JsonResponse = {status: false, data: [], error: {} };
+    let json: JsonResponse = { status: false, data: [], error: {} };
 
     try {
-        const response = await db.subject.findMany({ where: { show: true } });
+        const response = await db.subject.findMany();
+        json.data = response;
+        return res.status(200).json(json);
+    } catch (error) {
+        json.error = { error };
+        return res.status(500).send(json.error);
+    }
+};
+
+export const UpdateStatusSubject = async (req: Request, res: Response) => {
+    let json: JsonResponse = { status: false, data: [], error: {} };
+
+    const { status } = req.body;
+    const { subject_id } = req.params;
+
+    try {
+        const response = await db.subject.update({
+            data: {
+                show: status,
+            },
+            where: {
+                id: Number(subject_id)
+            }
+        });
         json.data = response;
         return res.status(200).json(json);
     } catch (error) {

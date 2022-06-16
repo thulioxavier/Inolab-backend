@@ -4,13 +4,12 @@ import { UserServices } from "../../services";
 import { TokenUserServices } from "../../services/TokenUserServices";
 import { CryptoPass } from "../../utils/PasswordCript";
 import { TokenUser } from "../../utils/TokenUser";
-
-import bcrypt from "bcryptjs";
-
-import JWT from "jsonwebtoken";
+import { NewError as RequestError } from "../../errors/throwError";
 
 import { PrismaClient } from "@prisma/client";
-import { userInfo } from "os";
+import { Data } from "../../response/response";
+import { User } from "../../models/User";
+
 const db = new PrismaClient();
 
 type PersoneModel = {
@@ -28,7 +27,7 @@ interface JsonResponse {
 }
 
 const NewError = (status: boolean, msgError: string): object => {
-    let json: JsonResponse = { data: Object, error: Object,  status: true};
+    let json: JsonResponse = { data: Object, error: Object, status: true };
     json.data = { status: status };
     json.error = msgError;
     return json;
@@ -42,7 +41,7 @@ const percent = (total: number, valor: number): number => {
 export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object, status: true };
 
-    const { email, name, password, registration, lastName, sexo} = req.body;
+    const { email, name, password, registration, lastName, sexo } = req.body;
 
     try {
         if ((await UserServices.userByEmail(email)) <= 0) {
@@ -52,9 +51,9 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
                 password: await CryptoPass.newPass(password),
                 registration,
                 last_name: lastName,
-                sexo,
             })
                 .then(async (resultUser) => {
+                    
                     await TokenUserServices.create({
                         id_user: Number(resultUser?.id),
                         token: await TokenUser.newToken(),
@@ -89,52 +88,21 @@ export const CreateUser = async (req: Request<PersoneModel>, res: Response) => {
 };
 
 export const Login = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object,  status: true };
 
-    let email: string = req.body.email;
-    let password: string = req.body.password;
+    const { body: {email, password} } = req;
 
-    if (email && password) {
-        const user = await db.user.findFirst({
-            where: {
-                email,
-            },
-        });
+    const result = await User.login({ email, password });
 
-        if (user) {
-            const hash: string = user?.password as string;
-
-            const match = await bcrypt.compareSync(password, hash);
-
-            if (match) {
-                const TOKEN = JWT.sign(
-                    {
-                        id: user.id,
-                        email: user.email,
-                        name: user.name,
-                    },
-                    process.env.JWT_SECRET_KEY as string,
-                );
-                json.data = {
-                    user: {
-                        id: user.id,
-                        email: user.email,
-                        name: user.name,
-                    },
-                    status: true,
-                    TOKEN,
-                };
-                return res.json({ json });
-            }
-            return res.json({ json: false });
-        }
+    if (result) {
+        return res.status(200).json(Data.responseData(200, result));
     }
+    return res.status(401).json(RequestError.unauthorized(401, 'Unauthorized Access!'));
 
-    return res.status(500).json({ json: false });
-};
+}
+
 
 export const SelectUsers = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object,  status: true };
+    let json: JsonResponse = { data: Object, error: Object, status: true };
 
     try {
         const response = await db.user.findMany({
@@ -161,7 +129,7 @@ export const SelectUsers = async (req: Request, res: Response) => {
 };
 
 export const ShowInfoDash = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object,  status: true};
+    let json: JsonResponse = { data: Object, error: Object, status: true };
     let { user } = req.headers;
     let { pg } = req.params;
 
@@ -322,30 +290,30 @@ export const ShowInfoDash = async (req: Request, res: Response) => {
 };
 
 export const SelectDateAnswer = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object,  status: true };
+    let json: JsonResponse = { data: Object, error: Object, status: true };
 
-    const {date, id_user} = req.params;
+    const { date, id_user } = req.params;
     try {
 
         const right = await db.answer.aggregate({
-            where: {answer_date: date, id_user: parseInt(id_user), status: true},
-            _sum:{
+            where: { answer_date: date, id_user: parseInt(id_user), status: true },
+            _sum: {
                 points: true,
             }
         });
 
         const wrong = await db.answer.aggregate({
-            where: {answer_date: date, id_user: parseInt(id_user), status: false},
-            _sum:{
+            where: { answer_date: date, id_user: parseInt(id_user), status: false },
+            _sum: {
                 points: true,
             }
         });
-        
-        json.data ={right, wrong};
+
+        json.data = { right, wrong };
         return res.status(200).json(json);
 
     } catch (error) {
-        json.error = {error};
+        json.error = { error };
         json.status = false;
         return res.status(500).send(json);
     }

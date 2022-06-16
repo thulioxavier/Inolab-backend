@@ -37,9 +37,10 @@ const formatData = async (date: Date) => {
 }
 
 export const CreateAnswer = async (req: Request, res: Response) => {
-    let json: JsonResponse = { data: Object, error: Object };
+    
+    const json: JsonResponse = { data: Object, error: Object };
 
-    let {
+    const {
         id_question,
         id_option,
         status,
@@ -71,16 +72,20 @@ export const CreateAnswer = async (req: Request, res: Response) => {
         default:
             break;
     }
+
     try {
+
+        let answer_date = (await formatData(new Date())).toString()
+
         await db.answer.create({
             data: {
                 id_option,
                 id_question,
                 id_user,
                 status,
-                points,
+                points: status ? points : (-1*points),
                 time_spent,
-                answer_date: (await formatData(new Date())).toString()
+                answer_date: answer_date,
             }
         }).then((response) => {
             json.data = { status: true };
