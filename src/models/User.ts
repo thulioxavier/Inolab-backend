@@ -40,5 +40,13 @@ export const User = {
             console.error(error);
             return false;
         }
+    },
+
+    findOne: async (values: {id: Number}) => {
+        try {
+            
+        } catch (error) {
+            
+        }
     }
 }

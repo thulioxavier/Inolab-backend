@@ -128,6 +128,22 @@ export const SelectUsers = async (req: Request, res: Response) => {
     }
 };
 
+export const findUserById = async (req: Request, res: Response) => {
+    let {id}: any = req.params;
+
+    try {
+        
+    id = Number(id);
+
+    let user = await User.findOne({id: id});
+    
+    } catch (error) {
+
+    }
+
+
+}
+
 export const ShowInfoDash = async (req: Request, res: Response) => {
     let json: JsonResponse = { data: Object, error: Object, status: true };
     let { user } = req.headers;
