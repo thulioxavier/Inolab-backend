@@ -1,8 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -11,22 +9,208 @@ datasource db {
 }
 
 model User {
-  id        Int @id @default(autoincrement())
-  name      String
-  email     String @unique
-  password  String
-
-  token_user Token_User[]
+  id           Int          @id @default(autoincrement())
+  email        String       @unique @db.VarChar(250)
+  name         String       @db.VarChar(250)
+  password     String       @db.VarChar(250)
+  uuid         String       @unique @default(uuid())
+  registration String       @unique @db.VarChar(250)
+  avatar       String?      @default("https://cdn-icons-png.flaticon.com/512/147/147144.png")
+  status       Boolean      @default(true)
+  id_couser    Int?
+  last_name    String       @db.VarChar(250)
+  courses      Course?      @relation(fields: [id_couser], references: [id])
+  answers      Answer[]
+  token_users  Token_User[]
 
   @@map("users")
 }
 
+model Admin {
+  id           Int           @id @default(autoincrement())
+  uuid         String        @unique @default(uuid()) @db.VarChar(250)
+  name         String        @db.VarChar(250)
+  email        String        @unique @db.VarChar(250)
+  password     String        @db.VarChar(250)
+  registration String?       @unique @db.VarChar(250)
+  avatar       String?       @default("https://cdn-icons-png.flaticon.com/512/147/147144.png") @db.VarChar(250)
+  status       Boolean       @default(true)
+  last_name    String        @db.VarChar(250)
+  contents     Content[]
+  modules      Module[]
+  token_admins Token_Admin[]
+
+  @@map("admins")
+}
+
+model Token_Admin {
+  id       Int    @id @default(autoincrement())
+  token    String @unique
+  id_admin Int
+  admins   Admin  @relation(fields: [id_admin], references: [id])
+
+  @@map("token_admins")
+}
+
 model Token_User {
-  id      Int @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   token   String @unique
   id_user Int
-
-  user    User @relation(fields: [id_user], references: [id])
+  user    User   @relation(fields: [id_user], references: [id])
 
   @@map("token_users")
+}
+
+model Subject {
+  id      Int      @id @default(autoincrement())
+  name    String   @db.VarChar(250)
+  show    Boolean  @default(true)
+  icon    String   @default("")
+  modules Module[]
+
+  @@map("subjects")
+}
+
+model Module {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(250)
+  id_subject Int
+  id_admin   Int?
+  admins     Admin?    @relation(fields: [id_admin], references: [id])
+  subjects   Subject   @relation(fields: [id_subject], references: [id])
+  contents   Content[]
+
+  @@map("modules")
+}
+
+model Content {
+  id           Int           @id @default(autoincrement())
+  title        String        @db.VarChar(250)
+  body         String
+  id_module    Int
+  abstract     String
+  id_admin     Int?
+  example      String
+  ref          String
+  url          String
+  admins       Admin?        @relation(fields: [id_admin], references: [id])
+  modules      Module        @relation(fields: [id_module], references: [id])
+  questions    Question[]
+  tag_contents Tag_Content[]
+
+  @@map("contents")
+}
+
+model Tag {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(250)
+  tag_contents Tag_Content[]
+
+  @@map("tags")
+}
+
+model Tag_Content {
+  id         Int     @id @default(autoincrement())
+  id_tag     Int
+  id_content Int
+  contents   Content @relation(fields: [id_content], references: [id])
+  tags       Tag     @relation(fields: [id_tag], references: [id])
+
+  @@map("tag_contents")
+}
+
+model Example {
+  id         Int    @id @default(autoincrement())
+  id_content Int
+  title      String @db.VarChar(200)
+  body       String @db.VarChar(200)
+
+  @@map("examples")
+}
+
+model Reference {
+  id         Int    @id @default(autoincrement())
+  body       String @db.VarChar(250)
+  id_content Int
+
+  @@map("references")
+}
+
+model Conetnt_Video {
+  id         Int    @id @default(autoincrement())
+  id_content Int
+  title      String @db.VarChar(250)
+  url        String
+
+  @@map("content_videos")
+}
+
+model Question {
+  id         Int      @id @default(autoincrement())
+  id_content Int
+  time       Int?
+  body       String
+  difficulty Int
+  contents   Content  @relation(fields: [id_content], references: [id])
+  answers    Answer[]
+  options    Option[]
+
+  @@map("questions")
+}
+
+model Option {
+  id          Int      @id @default(autoincrement())
+  id_question Int
+  body        String
+  correct     Boolean  @default(false)
+  questions   Question @relation(fields: [id_question], references: [id])
+  answers     Answer[]
+
+  @@map("options")
+}
+
+model Control_User {
+  id       Int      @id @default(autoincrement())
+  platform String   @db.VarChar(250)
+  version  String   @db.VarChar(250)
+  date     DateTime
+
+  @@map("control_users")
+}
+
+model Course {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(250)
+  users User[]
+
+  @@map("courses")
+}
+
+model Answer {
+  id          Int      @id @default(autoincrement())
+  id_user     Int
+  id_question Int
+  id_option   Int
+  status      Boolean
+  points      Int
+  time_spent  Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  answer_date String
+  options     Option   @relation(fields: [id_option], references: [id])
+  questions   Question @relation(fields: [id_question], references: [id])
+  users       User     @relation(fields: [id_user], references: [id])
+
+  @@map("answers")
+}
+
+model Level {
+  id Int @id @default(autoincrement())
+  level Int
+  name String @db.VarChar(250)
+  max_points Int
+  min_points Int
+
+  @@map("levels")
+
 }

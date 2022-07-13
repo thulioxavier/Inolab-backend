@@ -1,7 +1,5 @@
-
-
 export const Error = {
-    SelectError: async (code: string) => {
+    SelectError: async (code: String) => {
         let msg_error = '';
 
         switch (code) {
@@ -17,5 +15,5 @@ export const Error = {
         }
     
         return msg_error;
-    }
+    },
 }
