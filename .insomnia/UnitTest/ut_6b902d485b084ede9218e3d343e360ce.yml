@@ -1,0 +1,10 @@
+_id: ut_6b902d485b084ede9218e3d343e360ce
+type: UnitTest
+parentId: uts_8cfe28170f0648d994efd1f898a09c8b
+modified: 1642911734488
+created: 1642911692494
+requestId: req_f2326eb6c74247fdbd75a69c1bc6cce1
+name: SelectAreas
+code: |-
+  const response1 = await insomnia.send();
+  expect(response1.status).to.equal(200);

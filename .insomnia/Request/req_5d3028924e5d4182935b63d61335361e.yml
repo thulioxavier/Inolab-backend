@@ -1,0 +1,32 @@
+_id: req_5d3028924e5d4182935b63d61335361e
+type: Request
+parentId: fld_b07d808e90de40db916c806ae80fdbf2
+modified: 1644554340727
+created: 1642958812546
+url: "{{ _.base_url_app }}/user/"
+name: My Request
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Thulio Xavier",
+    	"email": "thulioxavier6791@gmail23.com",
+    	"password": "123456789",
+    	"registration": "1234567823932"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_a4a7df4ac31a4664bf5c96f3f86a546e
+authentication: {}
+metaSortKey: -1642924779577
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

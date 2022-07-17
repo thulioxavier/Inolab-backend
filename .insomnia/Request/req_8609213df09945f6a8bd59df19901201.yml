@@ -1,0 +1,30 @@
+_id: req_8609213df09945f6a8bd59df19901201
+type: Request
+parentId: fld_888fabe157884c249a8f117abfad603f
+modified: 1644554355576
+created: 1642890768774
+url: http://localhost:8080/api/app/subject
+name: CreateSubject
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Logica",
+    	"icon" : "123123"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_2d52b81443d74b8f86be649caa64c5b6
+authentication: {}
+metaSortKey: -1642890768774
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

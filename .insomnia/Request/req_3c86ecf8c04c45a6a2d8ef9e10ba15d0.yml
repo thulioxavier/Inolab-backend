@@ -1,0 +1,21 @@
+_id: req_3c86ecf8c04c45a6a2d8ef9e10ba15d0
+type: Request
+parentId: fld_b07d808e90de40db916c806ae80fdbf2
+modified: 1643314447888
+created: 1643176996029
+url: "{{ _.base_url_app }}/user"
+name: Select Users
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1643176996029
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

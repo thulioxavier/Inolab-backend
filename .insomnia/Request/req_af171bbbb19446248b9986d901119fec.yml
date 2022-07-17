@@ -1,0 +1,21 @@
+_id: req_af171bbbb19446248b9986d901119fec
+type: Request
+parentId: fld_ab791d78f2484cd2838d640283caffe7
+modified: 1644830085024
+created: 1643333228437
+url: "{{ _.base_url_app }}/contents/1"
+name: Select Content APP
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1643331883698
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

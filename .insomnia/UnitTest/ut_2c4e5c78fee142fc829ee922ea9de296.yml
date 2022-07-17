@@ -1,0 +1,10 @@
+_id: ut_2c4e5c78fee142fc829ee922ea9de296
+type: UnitTest
+parentId: uts_8cfe28170f0648d994efd1f898a09c8b
+modified: 1642910808717
+created: 1642910698863
+requestId: req_8609213df09945f6a8bd59df19901201
+name: Teste Areas
+code: |-
+  const response1 = await insomnia.send();
+  expect(response1.status).to.equal(200);
