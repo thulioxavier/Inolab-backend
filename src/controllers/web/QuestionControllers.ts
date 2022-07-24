@@ -101,6 +101,34 @@ export const CreateQuestion = async (req: Request, res: Response) => {
   }
 };
 
+export const questionsCount = async (req: Request, res: Response) => {
+    
+  try {
+      const questions = await db.question.count();
+
+      res.status(200).json({
+          data: {
+              success: true,
+              questions: {
+                  count: questions
+              }
+          }
+      })
+
+      return;
+  } catch (error) {
+      console.error(error);
+      res.status(422).json({
+          error: {
+              server: {
+                  msg: "Erro interno no servidor!"
+              }
+          }
+      })
+      return;
+  }
+}
+
 export const SelectQuestionById = async (req: Request, res: Response) => {
   let json: JsonResponse = { data: Object, error: Object };
   let { id_question } = req.params;

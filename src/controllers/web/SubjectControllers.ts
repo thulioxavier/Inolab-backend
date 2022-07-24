@@ -37,6 +37,34 @@ export const CreateSubject = async (req: Request, res: Response) => {
     }
 };
 
+export const subjectsCount = async (req: Request, res: Response) => {
+    
+    try {
+        const subjects = await db.subject.count();
+
+        res.status(200).json({
+            data: {
+                success: true,
+                subjects: {
+                    count: subjects
+                }
+            }
+        })
+
+        return;
+    } catch (error) {
+        console.error(error);
+        res.status(422).json({
+            error: {
+                server: {
+                    msg: "Erro interno no servidor!"
+                }
+            }
+        })
+        return;
+    }
+}
+
 export const SelectSubject = async (req: Request, res: Response) => {
     let json: JsonResponse = { status: false, data: [], error: {} };
 

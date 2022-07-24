@@ -28,17 +28,15 @@ model User {
 
 model Admin {
   id           Int           @id @default(autoincrement())
-  uuid         String        @unique @default(uuid()) @db.VarChar(250)
+  uuid         String        @unique @default(uuid())
   name         String        @db.VarChar(250)
   email        String        @unique @db.VarChar(250)
   password     String        @db.VarChar(250)
-  registration String?       @unique @db.VarChar(250)
-  avatar       String?       @default("https://cdn-icons-png.flaticon.com/512/147/147144.png") @db.VarChar(250)
   status       Boolean       @default(true)
   last_name    String        @db.VarChar(250)
   contents     Content[]
   modules      Module[]
-  token_admins Token_Admin[]
+  token_admins Token_Admin?
 
   @@map("admins")
 }
@@ -46,7 +44,7 @@ model Admin {
 model Token_Admin {
   id       Int    @id @default(autoincrement())
   token    String @unique
-  id_admin Int
+  id_admin Int @unique
   admins   Admin  @relation(fields: [id_admin], references: [id])
 
   @@map("token_admins")

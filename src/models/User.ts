@@ -42,11 +42,29 @@ export const User = {
         }
     },
 
-    findOne: async (values: {id: Number}) => {
+    findOne: async (values: { id: number }) => {
         try {
-            
+
+            const user = await db.user.findUnique({
+                where: { id: Number(values.id) },
+                select: {
+                    password: false,
+                    id: true,
+                    email: true,
+                    name: true,
+                    uuid: true,
+                    registration: true,
+                    avatar: true,
+                    status: true,
+                    last_name: true,
+                }
+            });
+
+            return user;
+
         } catch (error) {
-            
+            console.error(error);
+            throw new Error("Tente novamente mais tarde!");
         }
     }
 }
